@@ -9,7 +9,7 @@
 #define TEMP_SENSOR_H
 
 // @brief   启动一次 DS18B20 温度转换并读取结果
-// @return  摄氏温度值（含小数，分辨率 0.0625℃）
+// @return  摄氏温度值（含小数，分辨率 0.0625℃，负温返回负值）
 float Read_Tempe();
 
 #endif // TEMP_SENSOR_H
