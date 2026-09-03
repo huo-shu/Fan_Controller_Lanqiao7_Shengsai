@@ -15,6 +15,3 @@ Firmware/Listings/
 *.uvgui*
 *.bak
 *.scvd
-
-# Keil GUI project files (maintained in IDE, not versioned)
-Firmware/Project/
