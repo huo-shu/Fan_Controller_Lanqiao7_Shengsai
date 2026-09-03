@@ -10,8 +10,7 @@
 // 共阳数码管段码表：下标 0~9 对应数字 0~9，段线低电平有效
 uchar code DIG_CODE[] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
 
-uchar dis_code[8];  // 显示缓冲区：8 个数码位的段码，由显示管理模块刷新
-uchar dis_flag = 0; // 当前扫描位序号，范围 0~7，循环推进
+uchar dis_code[8], dis_flag = 0; // dis_code: 8 个数码位段码显示缓冲区；dis_flag: 当前扫描位序号 0~7 循环推进
 
 // @brief  数码管动态扫描：消隐、选中 dis_flag 位并输出其段码，随后推进位序号
 void display()
