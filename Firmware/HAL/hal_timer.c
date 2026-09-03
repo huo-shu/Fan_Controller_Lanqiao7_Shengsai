@@ -4,8 +4,6 @@
 // @date    2026-09-03
 //
 // @version V1.0 (2026-09-03) 初版发布
-//
-// @note    H1 假设变体：节拍处理由中断直连调用，去除函数指针间接层
 
 #include "type_def.h"
 #include "config.h"
