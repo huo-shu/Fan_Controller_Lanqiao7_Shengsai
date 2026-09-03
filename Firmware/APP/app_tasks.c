@@ -59,7 +59,7 @@ static void App_Commit(void)
 }
 
 // @brief   1ms 节拍处理（中断上下文）：推进软定时器、渲染待刷新显示并执行扫描
-static void App_TickHandler(void)
+void App_TickHandler(void)
 {
 	SoftTimer_Tick();
 	if(dirty == 1)
@@ -73,7 +73,6 @@ static void App_TickHandler(void)
 // @brief   应用初始化：装配 1ms 节拍、启动软定时器并推送初始 PWM 状态
 void App_Init(void)
 {
-	Timer2_SetTickCallback(App_TickHandler);
 	SoftTimer_Start(APP_TIMER_CH_LED, APP_LED_REFRESH_PERIOD, Cb_LedRefresh);
 	SoftTimer_Start(APP_TIMER_CH_TEMP, APP_TEMP_TRIGGER_PERIOD, Cb_TempTrigger);
 	SoftTimer_Start(APP_TIMER_CH_CNTDOWN, APP_COUNTDOWN_PERIOD, Cb_Countdown);

@@ -1,15 +1,16 @@
 // @file    hal_timer.c
-// @brief   定时器2驱动：1ms 系统节拍，中断内派发注册的回调
+// @brief   定时器2驱动：1ms 系统节拍，中断内直连节拍处理
 // @author  Huo-shu
 // @date    2026-09-03
 //
 // @version V1.0 (2026-09-03) 初版发布
+//
+// @note    H1 假设变体：节拍处理由中断直连调用，去除函数指针间接层
 
 #include "type_def.h"
 #include "config.h"
+#include "app_tasks.h"
 #include "hal_timer.h"
-
-static void (*tick_cb)(void); // 1ms 节拍回调，开中断前注册
 
 // @brief   初始化定时器2：1T 模式，16 位自动重装，1ms 溢出中断
 void Timer2Init(void)
@@ -21,15 +22,8 @@ void Timer2Init(void)
 	IE2 |= 0x04;               // 允许定时器2中断
 }
 
-// @brief   注册 1ms 节拍回调：定时器2每 1ms 溢出时被调用
-void Timer2_SetTickCallback(void (*callback)(void))
-{
-	tick_cb = callback;
-}
-
-// @brief   定时器2中断服务（1ms）：派发节拍回调
+// @brief   定时器2中断服务（1ms）：推进节拍处理
 void Timer2_ISR() interrupt 12
 {
-	if(tick_cb != 0)
-		tick_cb();
+	App_TickHandler();
 }
