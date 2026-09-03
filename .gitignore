@@ -18,3 +18,9 @@ Firmware/Listings/
 
 # Keil GUI project files (maintained in IDE, not versioned)
 Firmware/Project/
+
+# Historical source archives (V0 flat code, V1 verified snapshot), kept on disk only
+Backup/
+
+# Release assets are versioned despite the global *.hex rule
+!Release/**/*.hex
