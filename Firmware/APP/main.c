@@ -15,9 +15,9 @@ void main()
 {
 	led_on(~0x00);   // 上电熄灭全部 LED
 	module_off();    // 上电关闭继电器与蜂鸣器
-	Timer2Init();    // 1ms 系统节拍：任务标志与数码管扫描
+	Timer2Init();    // 1ms 系统节拍
+	App_Init();      // 装配节拍回调与软定时器，推送初始 PWM 状态
 	Timer1Init();    // 20us PWM 时基
-	Timer0Init();    // 1ms 倒计时递减
 	EA = 1;          // 开启总中断
 	while(1)
 	{
