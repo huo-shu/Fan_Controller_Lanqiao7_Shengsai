@@ -1,0 +1,17 @@
+# Keil C51 build artifacts
+Firmware/Output/
+Firmware/Listings/
+*.o
+*.d
+*.crf
+*.lst
+*.dep
+*.axf
+*.abs
+*.hex
+*.htm
+*.iex
+*.lnp
+*.uvgui*
+*.bak
+*.scvd
