@@ -1,5 +1,5 @@
 // @file    bsp_pwm.c
-// @brief   风扇 PWM 输出：定时器1 中断按模式生成占空比
+// @brief   风扇 PWM 输出：定时器1 中断按影子状态生成占空比
 // @author  Huo-shu
 // @date    2026-09-03
 //
@@ -8,10 +8,12 @@
 #include "type_def.h"
 #include "config.h"
 #include "app_cfg.h"
-#include "app_tasks.h"
 #include "bsp_pwm.h"
 
 sbit PWM = P3^4; // 风扇驱动引脚
+
+static uchar pwm_mode = 1; // 占空比档位 1~3，由 PWM_Control 更新
+static bit pwm_run = 0;    // 输出使能：1 按档位输出，0 停转
 
 // @brief  初始化定时器1为 20us 中断时基，驱动风扇 PWM 占空比生成
 void Timer1Init(void)
@@ -25,15 +27,22 @@ void Timer1Init(void)
 	ET1 = 1; // 允许定时器1中断
 }
 
-// @brief  定时器1中断：每 20us 推进 PWM 周期计数，按当前模式输出占空比；
-//         倒计时停止时强制输出低电平使风扇停转
+// @brief  推送 PWM 控制状态：先更新档位再更新使能，避免过渡态错档
+void PWM_Control(uchar mode, bit enable)
+{
+	pwm_mode = mode;
+	pwm_run = enable;
+}
+
+// @brief  定时器1中断：每 20us 推进周期计数，按当前档位输出占空比；
+//         输出关闭时保持低电平并复位周期计数
 void Timer1_ISR() interrupt 3
 {
 	static uint k = 0; // PWM 周期计数器，0~APP_PWM_PERIOD 循环
-	if(last_time > 0)
+	if(pwm_run)
 	{
 		k++;
-		if(mode == 1)
+		if(pwm_mode == 1)
 		{
 			if(k < APP_PWM_DUTY_MODE1)
 			{
@@ -49,7 +58,7 @@ void Timer1_ISR() interrupt 3
 				PWM = 1;
 			}
 		}
-		else if(mode == 2)
+		else if(pwm_mode == 2)
 		{
 			if(k < APP_PWM_DUTY_MODE2)
 			{
@@ -81,7 +90,6 @@ void Timer1_ISR() interrupt 3
 				PWM = 1;
 			}
 		}
-
 	}
 	else
 	{
